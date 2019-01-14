@@ -137,8 +137,9 @@
 
 				},
 			};
-
+			
 			function clique (event) {
+				/*
 				if (estadoAtual == estados.jogando)
 				bloco.pula();
 				else if (estadoAtual == estados.jogar){
@@ -156,9 +157,24 @@
 					bloco.y = 0;
 					bloco.velocidade = 0;
 				}
+			}*/
+
+			if (estadoAtual == estados.jogar){
+				estadoAtual = estados.jogando;
+				frames = 0;
 			}
-		
-				
+			else if(estadoAtual == estados.perdeu && bloco.y >= 2 * ALTURA){
+				estadoAtual = estados.jogar;
+				//Limpa os obstaculos do cenário.
+				obstaculos.limpa();
+				bloco.reset();
+				//Se quiser que o bloco comece de cima no ponto 0.
+				bloco.y = 0;
+				bloco.velocidade = 0;
+			}
+			else if (estadoAtual == estados.jogando)
+			bloco.pula();
+		}
 			function main() {
 				ALTURA = window.innerHeight;
 				LARGURA =  window.innerWidth;
@@ -171,7 +187,7 @@
 			if (LARGURA >= 500){
 				LARGURA = 600;
 				ALTURA = 600;
-		}
+			}
 				canvas = document.createElement("canvas");
 				canvas.width = LARGURA;
 				canvas.height = ALTURA;
@@ -179,8 +195,9 @@
 
 				ctx = canvas.getContext("2d")
 				document.body.appendChild(canvas);
+
 				document.addEventListener("mousedown", clique)
-				roda();
+				
 				recorde = localStorage.getItem("recorde");
 
 				if (recorde == null)
@@ -188,6 +205,7 @@
 				
 
 				estadoAtual = estados.jogar;
+				roda();
 			}
 			
 			function roda() {
@@ -214,7 +232,7 @@
 				
 				//Desenha o texto na tela. Altura: 38 Largura: 26
 				ctx.fillStyle = "#fff";
-				ctx.font = "50px Courier";
+				ctx.font = "50px Arial";
 				ctx.fillText(bloco.score, 30, 60);
 
 				if (estadoAtual == estados.jogar) {
@@ -229,6 +247,17 @@
 					ctx.translate(LARGURA / 2, ALTURA / 2 );
 					ctx.fillStyle = "#ffff";
 					
+				if (bloco.score > recorde)
+				// Menos 150 pra esquerda em X e menos 65 pra baixo em Y.
+					ctx.fillText("Novo Recorde!", -150, -65);
+				else if (recorde <10)
+					ctx.fillText("Record " + recorde, -99, -65);
+				else if(recorde >= 10 && recorde <100)
+					ctx.fillText("Record " + recorde, -112, -65);
+				else 
+					ctx.fillText("Record " + recorde, -125, -65);
+
+
 				if (bloco.score < 10){
 					// Posição do texto no cenário.
 					ctx.fillText(bloco.score, -13, 19);
