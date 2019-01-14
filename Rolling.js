@@ -1,7 +1,7 @@
 
 			// Variáveis globais do jogo.
 			// velocidade = 6pixels percorridos.
-			var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, estadoAtual, recorde,
+			var canvas, ctx, ALTURA, LARGURA, frames = 0, maxPulos = 3, velocidade = 6, estadoAtual, record, img,
 			
 			// Estados do jogo em que cada valor corresponde a uma ação do personagem e também a interação do cenário. A variável abaixo, se trata de uma variável mais complexa, pois contem condições.
 			estados = {
@@ -32,8 +32,8 @@
 				y: 0,
 
 				//Tamanho,cor, velocidade e força do pulo do BLOCO.
-				altura: 20,
-				largura: 20,
+				altura: spriteBoneco.altura,
+				largura: spriteBoneco.largura,
 				cor: "#ff4e4e",
 				gravidade: 1.0,
 				velocidade: 0,
@@ -65,15 +65,19 @@
 					this.velocidade = 0;
 					this.y = 0;
 
-					if (this.score > recorde)
-					localStorage.setItem("recorde", this.score);
-					recorde = this.score;
+					if (this.score > record){
+					localStorage.setItem("record", this.score);
+					record = this.score;
+					
+					}
+					
 					this.score = 0;
 				},
 				//Desenha o bloco no cenário.
 				desenha: function() {
-					ctx.fillStyle = this.cor;
-					ctx.fillRect(this.x, this.y, this.largura, this.altura);
+					//ctx.fillStyle = this.cor;
+					//ctx.fillRect(this.x, this.y, this.largura, this.altura);
+					spriteBoneco.desenha(this.x, this.y);
 				}
 
 			},
@@ -124,57 +128,37 @@
 					}
 				},
 
-				limpa: function(){
+				limpa: function() {
 					this._obs = [];
 
 				},
-				desenha: function(){
-					for(var i = 0, tam = this._obs.length; i < tam; i++) {
+				desenha: function() {
+					for (var i = 0, tam = this._obs.length; i < tam; i++) {
 						var obs= this._obs[i];
 						ctx.fillStyle = obs.cor;
 						ctx.fillRect(obs.x, chao.y - obs.altura, obs.largura, obs.altura);
 					}
-
-				},
+				}
 			};
 			
-			function clique (event) {
-				/*
+			function clique(event) {
 				if (estadoAtual == estados.jogando)
-				bloco.pula();
-				else if (estadoAtual == estados.jogar){
+					bloco.pula();
+
+				else if(estadoAtual == estados.jogar) {
 					estadoAtual = estados.jogando;
 				}
-
-				else if (estadoAtual == estados.perdeu){
-					estadoAtual = estados.jogar;
-					
+				
+				else if (estadoAtual == estados.perdeu && bloco.y >= 2 * ALTURA){
+					estadoAtual = estados.jogar	;
 					//Limpa os obstaculos do cenário.
-					obstaculos.limpa();
-					bloco.reset();
-
-					//Se quiser que o bloco comece de cima no ponto 0.
-					bloco.y = 0;
-					bloco.velocidade = 0;
-				}
-			}*/
-
-			if (estadoAtual == estados.jogar){
-				estadoAtual = estados.jogando;
-				frames = 0;
-			}
-			else if(estadoAtual == estados.perdeu && bloco.y >= 2 * ALTURA){
-				estadoAtual = estados.jogar;
-				//Limpa os obstaculos do cenário.
 				obstaculos.limpa();
 				bloco.reset();
-				//Se quiser que o bloco comece de cima no ponto 0.
+				/*Se quiser que o bloco comece de cima no ponto 0.
 				bloco.y = 0;
-				bloco.velocidade = 0;
+				bloco.velocidade = 0;*/
+				}
 			}
-			else if (estadoAtual == estados.jogando)
-			bloco.pula();
-		}
 			function main() {
 				ALTURA = window.innerHeight;
 				LARGURA =  window.innerWidth;
@@ -198,11 +182,12 @@
 
 				document.addEventListener("mousedown", clique)
 				
-				recorde = localStorage.getItem("recorde");
+				record = localStorage.getItem("record");
 
-				if (recorde == null)
-					recorde = 0;
-				
+				if (record == null)
+					record = 0;
+				img = new Image();
+				img.src = "C:/Users/H4CK3R/Desktop/Jogo/sheet.png";
 
 				estadoAtual = estados.jogar;
 				roda();
@@ -218,17 +203,17 @@
 			function atualiza() {
 				frames++;
 
-				bloco.atualiza();
-				
 				if (estadoAtual == estados.jogando)	
 					obstaculos.atualiza();
-					
 
+				bloco.atualiza();
 			}
+
 			
 			function desenha() {
-				ctx.fillStyle = "#50beff";
-				ctx.fillRect(0, 0, LARGURA, ALTURA);
+				/*ctx.fillStyle = "#50beff";
+				ctx.fillRect(0, 0, LARGURA, ALTURA);*/
+				bg.desenha(0, 0);
 				
 				//Desenha o texto na tela. Altura: 38 Largura: 26
 				ctx.fillStyle = "#fff";
@@ -247,25 +232,27 @@
 					ctx.translate(LARGURA / 2, ALTURA / 2 );
 					ctx.fillStyle = "#ffff";
 					
-				if (bloco.score > recorde)
+				if (bloco.score > record){
 				// Menos 150 pra esquerda em X e menos 65 pra baixo em Y.
-					ctx.fillText("Novo Recorde!", -150, -65);
-				else if (recorde <10)
-					ctx.fillText("Record " + recorde, -99, -65);
-				else if(recorde >= 10 && recorde <100)
-					ctx.fillText("Record " + recorde, -112, -65);
-				else 
-					ctx.fillText("Record " + recorde, -125, -65);
-
-
+					ctx.fillText("Novo record!", -150, -65);
+				}
+				else if (bloco.score < record < 10){
+					ctx.fillText("Record " + record, -99, -65);
+				}
+				else if(bloco.score >= record >= 10 && record <100){
+					ctx.fillText("Record " + record, -112, -65);
+				}
+				else {
+					ctx.fillText("Record " + record, -125, -65);
+				}
 				if (bloco.score < 10){
 					// Posição do texto no cenário.
 					ctx.fillText(bloco.score, -13, 19);
 
 					}
-				else if (bloco.score >= 10 && bloco.score <100)
+				else if (bloco.score >= 10 && bloco.score <100){
 					ctx.fillText(bloco.score, -26, 19);
-
+				}
 				else 
 					ctx.fillText(bloco.score, -39, 19);
 					
