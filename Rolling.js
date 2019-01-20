@@ -220,7 +220,7 @@
 					case 0:
 					  record == null;
 					  img = new Image();
-					  img.src = "C:/Users/H4CK3R/Desktop/Jogo/sheet.png";
+					  img.src = "C:/Users/william.aquino/Desktop/Jogo/sheet.png";
 	
 					estadoAtual = estados.jogar;
 					roda();
@@ -271,15 +271,14 @@
 					jogar.desenha(LARGURA / 2 - jogar.largura / 2, ALTURA / 2- jogar.altura / 2);
 				}
 					if (estadoAtual == estados.perdeu){
-					perdeu.desenha(LARGURA / 2 - perdeu.largura / 2, ALTURA / 2 - perdeu.altura / 2 - spriteRecord.altura);
-
-					spriteRecord.desenha(LARGURA / 2 - spriteRecord.largura / 2, ALTURA / 2 + perdeu.altura / 2 - spriteRecord.altura / 2);
+					perdeu.desenha(LARGURA / 2 - perdeu.largura / 2, ALTURA / 2 - perdeu.altura / 2 );
+					}
+			}	
+			if (estadoAtual == estados.perdeu){
+				spriteRecord.desenha(LARGURA / 2 - spriteRecord.largura / 2, ALTURA / 2 - spriteRecord.altura / 2 );
 				}
-				
-					
-
-			}
-
+		
+	
 
 			//inicializa o jogo
 			main ();
