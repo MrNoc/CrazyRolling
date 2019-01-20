@@ -12,8 +12,8 @@ function Sprite (x, y, largura, altura){
 var bg = new Sprite(0, 0, 600, 600),
 spriteBoneco = new Sprite(983, 17, 58, 53),
 
-perdeu = new Sprite(726, 393, 413, 160),
+perdeu = new Sprite(1079, 209, 299, 81),
 jogar = new Sprite(1079, 0, 319, 145),
 novo = new Sprite(603, 127, 397, 347),
-spriteRecord = new Sprite(918, 491, 257, 214),
+spriteRecord = new Sprite(1093, 290, 200, 180),
 spriteChao = new Sprite(0, 620, 600, 100);
