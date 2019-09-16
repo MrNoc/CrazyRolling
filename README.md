@@ -1,2 +1,2 @@
 # CrazyRolling
-Jogo em duas dimensões no estilo running.
+Game em duas dimensões no estilo running.
